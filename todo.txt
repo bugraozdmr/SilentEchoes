@@ -1,0 +1,4 @@
+genel arayüz oluştur ordan bağlantı sağlansın
+
+
+2 seçim birde çıkış classlara döndürebilirsin dosyaları

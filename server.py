@@ -2,10 +2,12 @@ from cryptography.fernet import Fernet
 import socket
 import modules.read_key as rk
 import modules.banner as banner
+import modules.server_methods as sm
 import modules.get_local_ip as gli
 import os
 from colorama import Fore
 import threading
+
 
 banner.info()
 
@@ -44,7 +46,7 @@ except TypeError:
     print(f"{Fore.RED}The input is not of the correct type.{Fore.RED}{Fore.RESET}")
     exit()
 
-print(f"{Fore.CYAN}------------------{Fore.CYAN}{Fore.RESET}\nHost: {host} \nPort: {port}\n{Fore.CYAN}------------------{Fore.CYAN}{Fore.RESET}\n")
+print(f"{Fore.CYAN}------------------{Fore.CYAN}{Fore.RESET}\nHost: {host} \nPort: {port}\n{Fore.CYAN}------------------{Fore.CYAN}{Fore.RESET}")
 
 room_password = input("Room Password (Optional): ").strip()
 if host != default_host:
@@ -65,53 +67,9 @@ except Exception as e:
     print(f"{Fore.RED}Error: {e}{Fore.RED}{Fore.RESET}")
     exit()
 
-clients = []
 
-def handle_client(client_socket, addr):
-    print(f"Connection success: {addr}")
-    try:
-        while True:
-            encrypted_response = client_socket.recv(1024)
-            if not encrypted_response:
-                print(f"Connection closed by {addr}.")
-                break
-            response = cipher.decrypt(encrypted_response).decode()
-            print(f"\r{response}\n{user}: ", end="")
-    except Exception as e:
-        print(f"{Fore.RED}Error while receiving message: {e}{Fore.RED}{Fore.RESET}")
-    finally:
-        client_socket.close()
-        if client_socket in clients:
-            clients.remove(client_socket)
-
-def accept_connections():
-    while True:
-        client_socket, addr = server_socket.accept()
-        clients.append(client_socket)
-        client_handler_thread = threading.Thread(target=handle_client, args=(client_socket, addr))
-        client_handler_thread.start()
-
-def send_messages():
-    while True:
-        try:
-            user_input = input(f"{user}: ") or user
-            message = f"{user} : {user_input}"
-            encrypted_message = cipher.encrypt(message.encode())
-            # Send the encrypted message to all connected clients
-            for client_socket in list(clients):  # Use list(clients) to avoid modifying the list while iterating
-                try:
-                    client_socket.send(encrypted_message)
-                except BrokenPipeError:
-                    print(f"{Fore.RED}Error: Broken pipe while sending message.{Fore.RED}{Fore.RESET}")
-                    client_socket.close()
-                    if client_socket in clients:
-                        clients.remove(client_socket)
-        except Exception as e:
-            print(f"{Fore.RED}Error while sending message: {e}{Fore.RED}{Fore.RESET}")
-
-# Start threads for accepting connections and sending messages
-accept_thread = threading.Thread(target=accept_connections)
-send_thread = threading.Thread(target=send_messages)
+accept_thread = threading.Thread(target=sm.accept_connections,args=(server_socket,cipher,user))
+send_thread = threading.Thread(target=sm.send_messages,args=(user,cipher))
 
 accept_thread.start()
 send_thread.start()
