@@ -56,6 +56,10 @@ if host != default_host:
 default_user = host
 user = input(f"User (default '{default_user}'): ").strip() or default_user
 
+if(len(user) > 20):
+    print(f"{Fore.RED}Username can not be longer than 20 characters ...{Fore.RED}{Fore.RESET}")
+    exit()
+
 # Create and configure server socket
 try:
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -68,7 +72,7 @@ except Exception as e:
     exit()
 
 
-accept_thread = threading.Thread(target=sm.accept_connections,args=(server_socket,cipher,user))
+accept_thread = threading.Thread(target=sm.accept_connections,args=(server_socket,cipher,user,room_password))
 send_thread = threading.Thread(target=sm.send_messages,args=(user,cipher))
 
 accept_thread.start()

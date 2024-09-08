@@ -30,9 +30,13 @@ except Exception as e:
 
 default_user = local_ip
 user = input(f"User (default '{default_user}'): ") or default_user
+if(len(user) > 20):
+    print(f"{Fore.RED}Username can not be longer than 20 characters ...{Fore.RED}{Fore.RESET}")
+    exit()
 
 host = input("Connect Host IP: ").strip()
 port_input = input("Connect Host Port: ").strip()
+room_password = input(f"Room Password (If Exists) : ").strip()
 
 try:
     port = int(port_input)
@@ -45,6 +49,9 @@ print(f"Connecting {host}:{port_input}")
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 try:
     client_socket.connect((host, port))
+    username_message = f"USERNAME:{user},PASSWORD:{room_password}" 
+    encrypted_message = cipher.encrypt(username_message.encode())
+    client_socket.send(encrypted_message)
 except Exception as e:
     print(f"{Fore.RED}Error: {e}{Fore.RED}{Fore.RESET}")
     exit()
