@@ -8,7 +8,7 @@ def receive_messages(client_socket,cipher,user):
                 print("Connection closed by the server.")
                 break
             response = cipher.decrypt(encrypted_response).decode()
-            print(f"\r{response}\n{user}: ", end="")
+            print(f"\n{response}\n{user}: ", end="")
         except Exception as e:
             print(f"{Fore.RED}Error while receiving message: {e}{Fore.RED}{Fore.RESET}")
             break
