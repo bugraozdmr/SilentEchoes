@@ -1,0 +1,18 @@
+Session started waiting
+Connection attempt from ('192.168.1.55', 51364)
+
+Connection attempt from ('192.168.1.55', 57190)
+192.168.1.55 has joined the chat. (Active users 2)
+192.168.1.55 : selam
+grant: mrhaba
+grant: nasılsın
+192.168.1.55 : iyi
+
+Connection attempt from ('192.168.1.55', 37930)
+new user has joined the chat. (Active users 3)
+new user : merhabalar herkese
+new user : çıkış
+new user has left the chat (Active users 3)
+grant: naber
+grant: devam ediyor
+grant: kapatıyor

@@ -1,0 +1,6 @@
+Session started waiting
+Connection attempt from ('192.168.1.55', 44378)
+anonim has joined the chat. (Active users 2)
+anonim : selam
+anonim : hi
+grant: hru
